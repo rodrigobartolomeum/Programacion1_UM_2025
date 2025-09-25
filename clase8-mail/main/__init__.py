@@ -14,6 +14,8 @@ from flask_jwt_extended import JWTManager
 #Importar Flask mail
 from flask_mail import Mail
 
+# Importar CORS
+from flask_cors import CORS
 
 #Inicializar API de Flask Restful
 api = Api()
@@ -33,6 +35,8 @@ mailsender = Mail()
 def create_app():
     app = Flask(__name__)
     load_dotenv()
+
+    CORS(app)  # Esto permite CORS para todos los orígenes y rutas
 
     #Si no existe el archivo de base de datos crearlo (solo válido si se utiliza SQLite)
     if not os.path.exists(os.getenv('DATABASE_PATH')+os.getenv('DATABASE_NAME')):

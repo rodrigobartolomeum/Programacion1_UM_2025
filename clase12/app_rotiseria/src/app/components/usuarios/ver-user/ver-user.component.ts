@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { Usuarios } from '../../../services/usuarios';
 
 @Component({
   selector: 'app-ver-user',
@@ -16,34 +17,51 @@ export class VerUserComponent {
 
   nombre!: string;
 
-  arrayUsuarios = [
-    {
-      id: 1,
-      nombre: "Martin",
-      email: "martin@correo.com"
-    },
-    {
-      id: 2,
-      nombre: "Rodrigo",
-      email: "rodrigo@correo.com"
-    },
-    {
-      id: 3,
-      nombre: "Maria",
-      email: "maria@correo.com"
-    },
-    {
-      id: 4,
-      nombre: "Juana",
-      email: "juana@correo.com"
-    }
-  ]
+  // arrayUsuarios = [
+  //   {
+  //     id: 1,
+  //     nombre: "Martin",
+  //     email: "martin@correo.com"
+  //   },
+  //   {
+  //     id: 2,
+  //     nombre: "Rodrigo",
+  //     email: "rodrigo@correo.com"
+  //   },
+  //   {
+  //     id: 3,
+  //     nombre: "Maria",
+  //     email: "maria@correo.com"
+  //   },
+  //   {
+  //     id: 4,
+  //     nombre: "Juana",
+  //     email: "juana@correo.com"
+  //   }
+  // ]
   
-  arrayFiltred = [...this.arrayUsuarios]
+  // arrayFiltred = [...this.arrayUsuarios]
 
+  arrayUsuarios:any[] = [];
+  arrayFiltred:any[] = [];
+  
   constructor(
-    private router:Router
+    private router:Router,
+    private usuarioSvc: Usuarios
   ){}
+
+  ngOnInit(){
+    this.usuarioSvc.getUsuarios().subscribe({
+      next: (res:any) => {
+        console.log("Usuarios: ", res);
+        this.arrayUsuarios = res.animales;
+        this.arrayFiltred = [...this.arrayUsuarios]
+      },
+      error: (err) => {
+        console.log("Error al traer usuarios: ", err);
+      }
+    })
+  }
 
   editarUsuario(usuario:any){
     // this.router.navigate([`/usuario/${usuario.id}/Editar`]);
@@ -52,6 +70,6 @@ export class VerUserComponent {
 
   buscar(){
     let nombreNuevo = this.nombre.toLowerCase();
-    this.arrayFiltred = this.arrayUsuarios.filter(u => u.nombre.toLowerCase().includes(nombreNuevo));
+    this.arrayFiltred = this.arrayUsuarios.filter(u => u.name.toLowerCase().includes(nombreNuevo));
   }
 }

@@ -13,7 +13,9 @@ auth = Blueprint('auth', __name__, url_prefix='/auth')
 @auth.route('/login', methods=['POST'])
 def login():
     #Busca al animal en la db por mail
-    animal = db.session.query(AnimalModel).filter(AnimalModel.email == request.get_json().get("email")).first_or_404()
+    animal = db.session.query(AnimalModel).filter(AnimalModel.email == request.get_json().get("email")).first()
+    if not animal:
+        return { 'success': False, 'msg': 'Usuario o password incorrecta'}, 401
     #Valida la contraseña
     if animal.validate_pass(request.get_json().get("password")):
         #Genera un nuevo token

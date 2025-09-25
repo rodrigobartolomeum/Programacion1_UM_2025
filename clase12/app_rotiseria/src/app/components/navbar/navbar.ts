@@ -12,4 +12,13 @@ import { CommonModule, NgIf } from "@angular/common";
 
 export class Navbar {
   ver = true;
+
+  isToken(){
+    return localStorage.getItem('token');
+  }
+
+  logout(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('email');
+  }
 }
